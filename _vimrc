@@ -1,0 +1,62 @@
+" prevents vim from emulating the original vi's bugs and limitations
+set nocompatible
+
+set backspace=start,indent,eol " make backspace work like 'normal' text editors
+
+set number                     " show line numbers
+
+" Disable annoying features
+set noerrorbells               " Don't beep
+set shortmess+=I               " Disable startup splash
+set nomodeline                 " Disable modelines
+
+" Tabbing
+set tabstop=4                  " width of a tab character in spaces
+set softtabstop=4              " defines number of spaces for when adding/remving tabs
+set shiftwidth=4               " number of spaces to use for autoindent
+set expandtab                  " use spaces instead of tab characters" Tabbing
+set tabstop=4                  " width of a tab character in spaces
+set softtabstop=4              " defines number of spaces for when adding/remving tabs
+set shiftwidth=4               " number of spaces to use for autoindent
+set expandtab                  " use spaces instead of tab characters
+
+" Undo
+" Undo file
+set undodir=~/.vim/undodir
+set undofile
+au BufWritePre /tmp/* setlocal noundofile   " Disable undofile in /tmp
+
+set undolevels=1000             " maximum number of changes that can be undone
+set undoreload=10000            " maximum number lines to save for undo on a buffer reload
+set history=1000                " Lots of history
+set backupdir=~/.vim/tmp,.      " Backup Dir
+set directory=~/.vim/tmp,.      " Swap Dir
+
+set hidden                     " allow buffer to be changed without writing to disk
+
+" Use default for colorful terminals
+syntax enable                  " enable syntax highlighting
+set t_Co=256                   " use 256 colours in terminal vim
+colorscheme default          " ships with vim
+
+" When editing a file, always jump to the last cursor position
+if has("autocmd")
+  autocmd BufReadPost *
+  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+  \   exe "normal! g'\"" |
+  \ endif
+endif
+
+" Except, don't remember the cursor position in git commits
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+
+" Keybindings
+
+" disable ctrl z suspending
+nnoremap <c-z> <nop>
+
+set clipboard=unnamed
